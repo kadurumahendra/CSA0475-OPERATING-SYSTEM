@@ -1,92 +1,85 @@
-#include <bits/stdc++.h>
-using namespace std;
-
- 
-int size = 8;
-int disk_size = 200;
- 
-void CSCAN(int arr[], int head)
-{
-    int seek_count = 0;
-    int distance, cur_track;
-    vector<int> left, right;
-    vector<int> seek_sequence;
- 
-   
-    left.push_back(0);
-    right.push_back(disk_size - 1);
- 
-   
-    for (int i = 0; i < size; i++) {
-        if (arr[i] < head)
-            left.push_back(arr[i]);
-        if (arr[i] > head)
-            right.push_back(arr[i]);
-    }
- 
-    
-    std::sort(left.begin(), left.end());
-    std::sort(right.begin(), right.end());
- 
-   
-    for (int i = 0; i < right.size(); i++) {
-        cur_track = right[i];
-        
-        seek_sequence.push_back(cur_track);
- 
-       
-        distance = abs(cur_track - head);
- 
-        
-        seek_count += distance;
- 
-        
-        head = cur_track;
-    }
- 
-    
-    head = 0;
- 
-    
-    seek_count += (disk_size - 1);
- 
-   
-    
-    for (int i = 0; i < left.size(); i++) {
-        cur_track = left[i];
- 
-        
-        seek_sequence.push_back(cur_track);
- 
-      
-        distance = abs(cur_track - head);
- 
-        seek_count += distance;
- 
-        
-        head = cur_track;
-    }
- 
-    cout << "Total number of seek operations = "
-         << seek_count << endl;
- 
-    cout << "Seek Sequence is" << endl;
- 
-    for (int i = 0; i < seek_sequence.size(); i++) {
-        cout << seek_sequence[i] << endl;
-    }
-}
- 
+#include<stdio.h>
+int absoluteValue(int);
 
 int main()
 {
- 
+    int queue[25],n,headposition,i,j,k,seek=0, maxrange,
+    difference,temp,queue1[20],queue2[20],temp1=0,temp2=0;
+    float averageSeekTime;
+
+     
+    printf("Enter the maximum range of Disk: ");
+    scanf("%d",&maxrange);
+
+    
+    printf("Enter the number of queue requests: ");
+    scanf("%d",&n);
+
+    
+    printf("Enter the initial head position: ");
+    scanf("%d",&headposition);
+
+    
+    printf("Enter the disk positions to be read(queue): ");
+    for(i=1;i<=n;i++)   
+    {
+        scanf("%d",&temp);  
+
+        
+        if(temp>headposition)
+        {
+            queue1[temp1]=temp; 
+            temp1++; 
+        }
+        else    
+        {   
+            queue2[temp2]=temp; 
+            temp2++;
+        }
+    }
+
    
-    int arr[size] = { 176, 79, 34, 60, 92, 11, 41, 114 };
-    int head = 50;
- 
-    cout << "Initial position of head: " << head << endl;
-    CSCAN(arr, head);
- 
-    return 0;
-}
+    for(i=0;i<temp1-1;i++)
+    {
+        for(j=i+1;j<temp1;j++)
+        {
+            if(queue1[i]>queue1[j])
+            {
+                temp=queue1[i];
+                queue1[i]=queue1[j];
+                queue1[j]=temp;
+            }
+        }
+    }
+
+    
+    for(i=0;i<temp2-1;i++)
+    {
+        for(j=i+1;j<temp2;j++)
+        {
+            if(queue2[i]>queue2[j])
+            {
+                temp=queue2[i];
+                queue2[i]=queue2[j];
+                queue2[j]=temp;
+            }
+        }
+    }    
+
+    
+    for(i=1,j=0;j<temp1;i++,j++)
+    {
+        queue[i]=queue1[j]; 
+    }
+
+    
+    queue[i]=maxrange;
+
+    
+    queue[i+1]=0; 
+
+    
+    for(i=temp1+3,j=0;j<temp2;i++,j++)
+    {
+        queue[i]=queue2[j];
+    }
